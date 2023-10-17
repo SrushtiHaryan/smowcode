@@ -1,49 +1,50 @@
+import java.util.Scanner;
+
 public class Solution1 {
 
-    static int findMinSwaps(int[] arr) {
-        int n = arr.length;
-
-        // Count the number of 1s in the array
-        int countOnes = 0;
-        for (int i = 0; i < n; i++) {
-            if (arr[i] == 1) {
-                countOnes++;
-            }
+    public static int minSwaps(int[] nums) {
+        int[] temp = new int[nums.length * 2];
+        
+        for(int i = 0; i < temp.length; ++i){
+            temp[i] = nums[i % nums.length]; 
         }
-
-        // Initialize variables for the current window
-        int windowOnes = 0;
+        
+        int win = 0;
+        for(int num : nums){ 
+            if(num == 1) win++;
+        }
+		
+        if(win == nums.length) return 0; 
         int minSwaps = Integer.MAX_VALUE;
-
-        // Calculate the number of 1s in the initial window
-        for (int i = 0; i < countOnes; i++) {
-            if (arr[i] == 1) {
-                windowOnes++;
+        int l = 0, r = 0;
+        int cone = 0; 
+        while(r < nums.length + win){
+            if(temp[r] == 1) cone++;
+            
+            if(r - l + 1 > win){ 
+                if(temp[l] == 1) cone--;
+                l++;
             }
+            
+            if(r - l + 1 == win){ 
+                int currentWinSwapNeeded = win - cone;
+                minSwaps = Math.min(minSwaps, currentWinSwapNeeded);
+            }
+            r++;
         }
-
-        // Iterate through the rest of the array
-        for (int i = countOnes; i < n; i++) {
-            // Update minSwaps with the minimum swaps required to move the window
-            minSwaps = Math.min(minSwaps, countOnes - windowOnes);
-
-            // Update the window for the next iteration
-            if (arr[i] == 1) {
-                windowOnes++;
-            }
-            if (arr[i - countOnes] == 1) {
-                windowOnes--;
-            }
-        }
-
-        // Return the minimum swaps required
-        return minSwaps;
-    }
+        
+        return minSwaps;    }
 
     public static void main(String[] args) {
-        int[] arr = {1, 0, 0, 1, 1, 0, 1, 1, 1, 0};
+    Scanner ss=new Scanner(System.in);
+    int n=ss.nextInt();
+    int arr[]=new int[n];
+    for(int g=0;g<n;g++)
+    {
+    arr[g]=ss.nextInt();
 
-        int minSwaps = findMinSwaps(arr);
-        System.out.println("Minimum Swaps: " + minSwaps);
     }
+
+    System.out.println(minSwaps(arr));
+}
 }

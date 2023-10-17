@@ -1,50 +1,41 @@
 import java.util.Scanner;
 
+import java.util.Arrays;
+
 public class Solution1 {
-
-    public static int minSwaps(int[] nums) {
-        int[] temp = new int[nums.length * 2];
-        
-        for(int i = 0; i < temp.length; ++i){
-            temp[i] = nums[i % nums.length]; 
-        }
-        
-        int win = 0;
-        for(int num : nums){ 
-            if(num == 1) win++;
-        }
-		
-        if(win == nums.length) return 0; 
-        int minSwaps = Integer.MAX_VALUE;
-        int l = 0, r = 0;
-        int cone = 0; 
-        while(r < nums.length + win){
-            if(temp[r] == 1) cone++;
-            
-            if(r - l + 1 > win){ 
-                if(temp[l] == 1) cone--;
-                l++;
-            }
-            
-            if(r - l + 1 == win){ 
-                int currentWinSwapNeeded = win - cone;
-                minSwaps = Math.min(minSwaps, currentWinSwapNeeded);
-            }
-            r++;
-        }
-        
-        return minSwaps;    }
-
     public static void main(String[] args) {
-    Scanner ss=new Scanner(System.in);
-    int n=ss.nextInt();
-    int arr[]=new int[n];
-    for(int g=0;g<n;g++)
-    {
-    arr[g]=ss.nextInt();
-
+        countSwaps();
     }
 
-    System.out.println(minSwaps(arr));
-}
+    public static void countSwaps() {
+        Scanner scanner = new Scanner(System.in);
+        int size = scanner.nextInt();
+        int[] elements = new int[size];
+        for (int i = 0; i < size; i++) {
+            elements[i] = scanner.nextInt();
+        }
+        System.out.println(calculateSwaps(elements, size));
+        scanner.close();
+    }
+
+    public static int calculateSwaps(int[] array, int length) {
+        int countOfZeros = 0;
+        int swapsCount = 0;
+
+        // Count the number of 0s
+        for (int element : array) {
+            if (element == 0) {
+                countOfZeros++;
+            }
+        }
+
+        // Count the number of 1s in the first countOfZeros elements
+        for (int i = 0; i < countOfZeros; i++) {
+            if (array[i] == 1) {
+                swapsCount++;
+            }
+        }
+
+        return swapsCount;
+    }
 }
